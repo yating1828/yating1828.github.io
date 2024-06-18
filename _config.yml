@@ -1,0 +1,5 @@
+title: My Jekyll Blog
+description: A blog created with Jekyll and hosted on GitHub Pages.
+baseurl: ""
+url: "https://yourusername.github.io"
+theme: minima
