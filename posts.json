@@ -1,0 +1,14 @@
+[
+    {
+        "title": "Welcome to Jekyll",
+        "date": "2024-06-15",
+        "url": "/2024/06/15/welcome-to-jekyll.html",
+        "content": "This is the first post of my blog."
+    },
+    {
+        "title": "Another Post",
+        "date": "2024-06-16",
+        "url": "/2024/06/16/another-post.html",
+        "content": "This is another post on my blog."
+    }
+]
