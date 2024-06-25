@@ -1,7 +1,9 @@
 <!DOCTYPE html>
-<html>
+<html lang="zh-CN">
 <head>
-    <title>My Personal Website</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>我的个人网页</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -9,15 +11,78 @@
             margin: 0;
             padding: 20px;
         }
-        h1 {
-            color: #333;
+
+        .header {
+            width: 100%;
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 0;
+            text-align: center;
+            position: relative;
         }
-        #search-results {
-            margin-top: 20px;
+
+        .header h1 {
+            margin: 0;
         }
-        .search-container {
-            margin-bottom: 20px;
+
+        .avatar {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            cursor: pointer;
         }
+
+        .info-popup {
+            display: none;
+            position: absolute;
+            top: 70px;
+            right: 10px;
+            width: 200px;
+            background-color: white;
+            border: 1px solid #ccc;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            border-radius: 5px;
+            z-index: 1;
+        }
+
+        .info-popup h2 {
+            margin: 10px;
+            font-size: 16px;
+        }
+
+        .info-popup p, .info-popup a {
+            margin: 10px;
+            font-size: 14px;
+        }
+
+        .upload-section, .search-container {
+            margin: 20px;
+        }
+
+        .bookshelf {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            padding: 20px;
+            max-height: 70vh;
+            overflow-y: auto;
+        }
+
+        .book {
+            margin: 10px;
+        }
+
+        .book img {
+            width: 150px;
+            height: 220px;
+            object-fit: cover;
+            border-radius: 5px;
+            box-shadow: 0 0 5px rgba(0,0,0,0.2);
+        }
+
         .post {
             background-color: #fff;
             border: 1px solid #ddd;
@@ -25,28 +90,85 @@
             padding: 10px;
             border-radius: 5px;
         }
+
         .post h2 {
             margin: 0 0 10px 0;
         }
+
         .post p {
             margin: 0;
         }
     </style>
 </head>
 <body>
-    <h1>Welcome to My Blog</h1>
+
+    <div class="header">
+        <h1>我的个人网页</h1>
+        <img src="your-avatar-url.jpg" alt="头像" class="avatar" onclick="toggleInfo()">
+        <div class="info-popup" id="infoPopup">
+            <h2>你的名字</h2>
+            <p>职业: 你的职业</p>
+            <p>Email: <a href="mailto:youremail@example.com">youremail@example.com</a></p>
+            <p>社交媒体:</p>
+            <p>
+                <a href="your-facebook-url" target="_blank">Facebook</a> |
+                <a href="your-twitter-url" target="_blank">Twitter</a> |
+                <a href="your-linkedin-url" target="_blank">LinkedIn</a>
+            </p>
+        </div>
+    </div>
+
     <p>╲(｡◕‿◕｡)╱</p>
-   
     <p><a href="message.html">这是一个留言板</a></p>
 
-    <div class="search-container">
-        <input type="text" id="search-input" placeholder="Search for posts...">
-        <button onclick="searchPosts()">Search</button>
+    <div class="upload-section">
+        <input type="file" id="fileInput" multiple>
+        <button onclick="uploadFiles()">上传书籍封面</button>
     </div>
-    
+
+    <div class="bookshelf" id="bookshelf">
+        <!-- 书籍封面会显示在这里 -->
+    </div>
+
+    <div class="search-container">
+        <input type="text" id="search-input" placeholder="搜索文章...">
+        <button onclick="searchPosts()">搜索</button>
+    </div>
+
     <div id="search-results"></div>
 
     <script>
+        function toggleInfo() {
+            var infoPopup = document.getElementById('infoPopup');
+            if (infoPopup.style.display === 'none' || infoPopup.style.display === '') {
+                infoPopup.style.display = 'block';
+            } else {
+                infoPopup.style.display = 'none';
+            }
+        }
+
+        function uploadFiles() {
+            var fileInput = document.getElementById('fileInput');
+            var bookshelf = document.getElementById('bookshelf');
+
+            for (var i = 0; i < fileInput.files.length; i++) {
+                var file = fileInput.files[i];
+                var reader = new FileReader();
+
+                reader.onload = function(event) {
+                    var img = document.createElement('img');
+                    img.src = event.target.result;
+                    img.alt = '书籍封面';
+                    var bookDiv = document.createElement('div');
+                    bookDiv.classList.add('book');
+                    bookDiv.appendChild(img);
+                    bookshelf.appendChild(bookDiv);
+                }
+
+                reader.readAsDataURL(file);
+            }
+        }
+
         async function searchPosts() {
             const query = document.getElementById('search-input').value.toLowerCase();
             const response = await fetch('posts.json');
